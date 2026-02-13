@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarı Papatyam</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-yellow: #FFD700;
+            --soft-yellow: #FFF9E3;
+            --dark-text: #5D5326;
+            --accent-gold: #DAA520;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--soft-yellow);
+            color: var(--dark-text);
+            overflow-x: hidden;
+        }
+
+        /* Çiçek Yağmuru */
+        .flower-field {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: -1;
+        }
+
+        .falling-flower {
+            position: absolute;
+            top: -50px;
+            font-size: 25px;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            color: #B8860B;
+            margin-bottom: 10px;
+            animation: heartBeat 2s infinite;
+        }
+
+        @keyframes heartBeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .anniversary-card {
+            background: white;
+            padding: 30px;
+            border-radius: 50px 0 50px 0;
+            box-shadow: 10px 10px 0px var(--primary-yellow);
+            margin: 30px 0;
+        }
+
+        .days-count {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--accent-gold);
+            display: block;
+        }
+
+        .flower-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .flower-grid img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+            border: 4px solid white;
+            transition: transform 0.3s;
+        }
+
+        .flower-grid img:hover {
+            transform: rotate(3deg) scale(1.05);
+        }
+
+        /* ETKİLEŞİM BUTONU */
+        .surprise-btn {
+            background: var(--primary-yellow);
+            color: var(--dark-text);
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(218, 165, 32, 0.3);
+            transition: all 0.3s;
+            margin: 20px 0;
+        }
+
+        .surprise-btn:hover {
+            transform: translateY(-5px);
+            background: var(--accent-gold);
+            color: white;
+        }
+
+        /* SURPRISE POPUP */
+        #modal {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 0 100px rgba(0,0,0,0.2);
+            z-index: 100;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 99;
+        }
+
+        .close-btn {
+            background: #eee;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="flower-field" id="flower-field"></div>
+    <div id="overlay"></div>
+
+    <div id="modal">
+        <h2 style="font-family: 'Dancing Script'; font-size: 2.5rem; color: var(--accent-gold);">Sürpriz! 🌼</h2>
+        <p id="surprise-text">Sen benim hayatıma açan en güzel sarı papatyasın. Her günün bu çiçekler gibi parlak olsun sevgilim!</p>
+        <button class="close-btn" onclick="closeSurprise()">Kapat ❤️</button>
+    </div>
+
+    <div class="container">
+        <h1>Sarı Papatyam</h1>
+        
+        <div class="anniversary-card">
+            <p style="margin: 0; font-weight: 600;">29 Ocak 2026'dan beri...</p>
+            <span class="days-count" id="days-display">0</span>
+        </div>
+
+        <button class="surprise-btn" onclick="showSurprise()">Sana Bir Notum Var! ✨</button>
+
+        <div class="flower-grid">
+            <img src="https://images.pexels.com/photos/1366630/pexels-photo-1366630.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Sarı Çiçek">
+            <img src="https://images.pexels.com/photos/1390433/pexels-photo-1390433.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Papatya">
+        </div>
+
+        <div class="letter" style="background: white; padding: 20px; border-radius: 15px; border: 1px dashed var(--accent-gold);">
+            "Seninle geçirdiğimiz her an, koleksiyonumdaki en değerli mücevher gibi. Bu küçük site, sana olan sevgimin sadece küçük bir yansıması..."
+        </div>
+    </div>
+
+    <script>
+        // TARİH: 29 Ocak 2026
+        const startDate = new Date(2026, 0, 29); 
+        
+        function updateDays() {
+            const now = new Date();
+            const diffTime = now - startDate;
+            // Eğer bugün 29 Ocak'tan önceyse 0 göster, sonraysa günü hesapla
+            const diffDays = diffTime > 0 ? Math.floor(diffTime / (1000 * 60 * 60 * 24)) : 0; 
+            document.getElementById("days-display").innerText = diffDays + ". Gün";
+        }
+        updateDays();
+
+        // SURPRIZ FONKSIYONLARI
+        function showSurprise() {
+            document.getElementById('modal').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+            
+            // Konfeti etkisi yarat
+            for(let i=0; i<30; i++) {
+                setTimeout(createFlower, i * 50);
+            }
+        }
+
+        function closeSurprise() {
+            document.getElementById('modal').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        // ÇİÇEK YAĞDIRMA
+        const field = document.getElementById('flower-field');
+        const flowers = ['🌼', '🌻', '✨', '💛'];
+
+        function createFlower() {
+            const f = document.createElement('div');
+            f.className = 'falling-flower';
+            f.innerText = flowers[Math.floor(Math.random() * flowers.length)];
+            f.style.left = Math.random() * 100 + 'vw';
+            f.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            field.appendChild(f);
+            setTimeout(() => { f.remove(); }, 5000);
+        }
+
+        setInterval(createFlower, 400);
+    </script>
+</body>
+</html>
