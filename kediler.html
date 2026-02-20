@@ -6,183 +6,83 @@
     <title>Bizim Hikayemiz 🐾</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
     <style>
-        body {
-            background-color: #FFF9E3;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden;
-            font-family: 'Dancing Script', cursive;
-        }
+        body { background-color: #FFF9E3; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; font-family: 'Dancing Script', cursive; }
+        .stage { position: relative; width: 450px; height: 300px; display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 20px; }
 
-        .stage {
-            position: relative;
-            width: 400px;
-            height: 250px;
-        }
-
-        /* KEDİ TASARIMI */
-        .cat {
-            position: absolute;
-            bottom: 0;
-            width: 100px;
-            height: 120px;
-            transition: all 1.5s cubic-bezier(0.45, 0.05, 0.55, 0.95);
-        }
-
-        .white-cat { left: 0; }
-        .black-cat { right: 0; }
-
-        .cat-body {
-            position: absolute;
-            bottom: 0;
-            width: 100px;
-            height: 80px;
-            border-radius: 50px 50px 10px 10px;
-        }
-        .white-cat .cat-body { background: #ffffff; border: 1px solid #eee; }
+        /* KEDİ TASARIMI (CSS ÇİZİMİ) */
+        .cat { position: relative; width: 120px; height: 150px; transition: all 1.8s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+        
+        .cat-body { position: absolute; bottom: 0; width: 100px; height: 90px; border-radius: 60px 60px 20px 20px; z-index: 1; }
+        .white-cat .cat-body { background: #fff; border: 1px solid #eee; }
         .black-cat .cat-body { background: #222; }
 
-        .cat-head {
-            position: absolute;
-            top: 0;
-            width: 80px;
-            height: 70px;
-            border-radius: 40px;
-            left: 10px;
-            z-index: 2;
-        }
-        .white-cat .cat-head { background: #ffffff; border: 1px solid #eee; }
+        .cat-head { position: absolute; top: 15px; width: 90px; height: 75px; border-radius: 50%; left: 5px; z-index: 2; transition: transform 0.3s; }
+        .white-cat .cat-head { background: #fff; border: 1px solid #eee; }
         .black-cat .cat-head { background: #222; }
 
-        .eye {
-            position: absolute;
-            top: 30px;
-            width: 8px;
-            height: 8px;
-            background: #333;
-            border-radius: 50%;
-            transition: all 0.5s;
-        }
-        .white-cat .eye { background: #333; }
-        .black-cat .eye { background: #fff; }
-        .eye.left { left: 20px; }
-        .eye.right { right: 20px; }
-
-        /* Kulaklar */
-        .ear {
-            position: absolute;
-            top: -10px;
-            width: 0;
-            height: 0;
-            border-left: 12px solid transparent;
-            border-right: 12px solid transparent;
-        }
-        .ear.left { left: 15px; }
-        .ear.right { right: 15px; }
+        /* Kulaklar (Animasyonlu) */
+        .ear { position: absolute; top: -8px; width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; animation: earTwitch 3s infinite; }
+        .ear.left { left: 10px; } .ear.right { right: 10px; }
         .white-cat .ear { border-bottom: 25px solid #fff; }
         .black-cat .ear { border-bottom: 25px solid #222; }
 
-        /* Kuyruk */
-        .tail {
-            position: absolute;
-            bottom: 10px;
-            width: 50px;
-            height: 12px;
-            border-radius: 10px;
-            animation: wag 2s infinite;
-        }
-        .white-cat .tail { right: -30px; background: #fff; transform-origin: left; border: 1px solid #eee; }
-        .black-cat .tail { left: -30px; background: #222; transform-origin: right; }
+        @keyframes earTwitch { 0%, 90%, 100% { transform: rotate(0); } 95% { transform: rotate(15deg); } }
 
-        @keyframes wag {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(25deg); }
-        }
+        /* Gözler (Göz Kırpma) */
+        .eye { position: absolute; top: 35px; width: 10px; height: 10px; border-radius: 50%; animation: blink 4s infinite; }
+        .eye.left { left: 22px; } .eye.right { right: 22px; }
+        .white-cat .eye { background: #333; } .black-cat .eye { background: #fff; }
 
-        /* SARILMA */
-        .hugging .white-cat { transform: translateX(110px) rotate(10deg); }
-        .hugging .black-cat { transform: translateX(-110px) rotate(-10deg); }
-        .hugging .eye { height: 2px; margin-top: 4px; } /* Gözlerini yumma efekti */
+        @keyframes blink { 0%, 95%, 100% { height: 10px; } 97% { height: 1px; } }
 
-        .heart-btn {
-            position: absolute;
-            top: -60px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #FFD700;
-            border: none;
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            font-size: 35px;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            z-index: 10;
-        }
+        /* Kuyruk (Daha yumuşak sallanma) */
+        .tail { position: absolute; bottom: 10px; width: 60px; height: 15px; border-radius: 15px; animation: tailWag 2.5s infinite ease-in-out; }
+        .white-cat .tail { right: -35px; background: #fff; transform-origin: left; border: 1px solid #eee; }
+        .black-cat .tail { left: -35px; background: #222; transform-origin: right; }
 
-        #msg {
-            margin-top: 40px;
-            font-size: 2.5rem;
-            color: #B8860B;
-            opacity: 0;
-            transition: opacity 1s;
-        }
+        @keyframes tailWag { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(35deg); } }
+
+        /* SARILMA AKSİYONU */
+        .hugging .white-cat { transform: translateX(115px) rotate(8deg); }
+        .hugging .black-cat { transform: translateX(-115px) rotate(-8deg); }
+        .hugging .eye { height: 2px !important; animation: none; } /* Mutluluktan göz yumma */
+
+        .heart-btn { background: #FFD700; border: none; width: 80px; height: 80px; border-radius: 50%; font-size: 40px; cursor: pointer; box-shadow: 0 8px 20px rgba(0,0,0,0.1); z-index: 10; transition: transform 0.3s; margin-bottom: 20px; }
+        .heart-btn:hover { transform: scale(1.1); }
+
+        #msg { margin-top: 40px; font-size: 2.5rem; color: #B8860B; opacity: 0; transition: opacity 1s; }
     </style>
 </head>
 <body>
-
-    <h1 style="color: #B8860B; font-size: 3rem; margin-bottom: 80px;">Sarılsınlar mı?</h1>
-
+    <h1 style="color: #B8860B; font-size: 3rem; margin-bottom: 40px;">Birlikte Daha Güzeliz...</h1>
     <div class="stage" id="stage">
-        <button class="heart-btn" onclick="hug()">💛</button>
-        
         <div class="cat white-cat">
             <div class="ear left"></div><div class="ear right"></div>
-            <div class="cat-head">
-                <div class="eye left"></div><div class="eye right"></div>
-            </div>
-            <div class="cat-body"></div>
-            <div class="tail"></div>
+            <div class="cat-head"><div class="eye left"></div><div class="eye right"></div></div>
+            <div class="cat-body"></div><div class="tail"></div>
         </div>
-
+        <button class="heart-btn" onclick="hug()">💛</button>
         <div class="cat black-cat">
             <div class="ear left"></div><div class="ear right"></div>
-            <div class="cat-head">
-                <div class="eye left"></div><div class="eye right"></div>
-            </div>
-            <div class="cat-body"></div>
-            <div class="tail"></div>
+            <div class="cat-head"><div class="eye left"></div><div class="eye right"></div></div>
+            <div class="cat-body"></div><div class="tail"></div>
         </div>
     </div>
-
-    <div id="msg">Seni Çok Seviyorum! ❤️</div>
-
-    <a href="index.html" style="margin-top: 50px; text-decoration: none; color: #5D5326;">← Geri Dön</a>
+    <div id="msg">Her zaman yan yana... ❤️</div>
+    <a href="index.html" style="margin-top: 50px; text-decoration: none; color: #5D5326; font-family: sans-serif;">← Ana Sayfaya Dön</a>
 
     <script>
         function hug() {
             document.getElementById('stage').classList.add('hugging');
             document.getElementById('msg').style.opacity = '1';
-            setInterval(createHeart, 300);
-        }
-
-        function createHeart() {
-            const h = document.createElement('div');
-            h.innerHTML = "💛";
-            h.style.position = "fixed";
-            h.style.bottom = "0";
-            h.style.left = Math.random() * 100 + "vw";
-            h.style.transition = "all 3s linear";
-            document.body.appendChild(h);
-            setTimeout(() => {
-                h.style.transform = `translateY(-110vh) rotate(${Math.random()*360}deg)`;
-                h.style.opacity = "0";
-            }, 50);
-            setTimeout(() => h.remove(), 3000);
+            setInterval(() => {
+                const h = document.createElement('div');
+                h.innerHTML = "💛"; h.style.position = "fixed"; h.style.bottom = "0";
+                h.style.left = Math.random() * 100 + "vw"; h.style.transition = "all 3s linear";
+                document.body.appendChild(h);
+                setTimeout(() => { h.style.transform = `translateY(-110vh) rotate(${Math.random()*360}deg)`; h.style.opacity = "0"; }, 50);
+                setTimeout(() => h.remove(), 3000);
+            }, 300);
         }
     </script>
 </body>
