@@ -6,6 +6,7 @@
     <title>Sarı Papatyam</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
     <style>
+        /* MEVCUT TASARIM DEĞİŞMEDİ */
         :root {
             --primary-yellow: #FFD700;
             --soft-yellow: #FFF9E3;
@@ -21,7 +22,6 @@
             overflow-x: hidden;
         }
 
-        /* Çiçek Yağmuru */
         .flower-field {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -91,11 +91,8 @@
             transition: transform 0.3s;
         }
 
-        .flower-grid img:hover {
-            transform: rotate(3deg) scale(1.05);
-        }
+        .flower-grid img:hover { transform: rotate(3deg) scale(1.05); }
 
-        /* ETKİLEŞİM BUTONU */
         .surprise-btn {
             background: var(--primary-yellow);
             color: var(--dark-text);
@@ -107,16 +104,64 @@
             cursor: pointer;
             box-shadow: 0 10px 20px rgba(218, 165, 32, 0.3);
             transition: all 0.3s;
-            margin: 20px 0;
+            margin: 10px;
         }
 
-        .surprise-btn:hover {
-            transform: translateY(-5px);
-            background: var(--accent-gold);
-            color: white;
+        /* YENİ ÖZELLİK: KALP ANİMASYONU TASARIMI */
+        #heart-container {
+            display: none;
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 200;
         }
 
-        /* SURPRISE POPUP */
+        .heart-svg {
+            width: 300px;
+            height: 300px;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+        }
+
+        .heart-path {
+            stroke: var(--primary-yellow);
+            stroke-width: 5;
+            fill: none;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+        }
+
+        .animate-heart {
+            animation: drawHeart 3s linear forwards;
+        }
+
+        @keyframes drawHeart {
+            /* Saat yönünün tersi için 1000'den -1000'e çekiyoruz */
+            from { stroke-dashoffset: -1000; }
+            to { stroke-dashoffset: 0; }
+        }
+
+        .heart-text {
+            position: absolute;
+            top: 45%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: #B8860B;
+            opacity: 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        .fade-in-text {
+            animation: fadeIn 1s ease-in forwards 2.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* POPUP MODAL (Eski sürümden devam) */
         #modal {
             display: none;
             position: fixed;
@@ -135,7 +180,7 @@
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             z-index: 99;
         }
 
@@ -152,7 +197,14 @@
 <body>
 
     <div class="flower-field" id="flower-field"></div>
-    <div id="overlay"></div>
+    <div id="overlay" onclick="closeSurprise(); closeHeart();"></div>
+
+    <div id="heart-container">
+        <svg class="heart-svg" viewBox="0 0 200 200">
+            <path class="heart-path" id="main-heart" d="M100 170 C100 170 20 120 20 65 C20 40 40 20 65 20 C80 20 95 30 100 45 C105 30 120 20 135 20 C160 20 180 40 180 65 C180 120 100 170 100 170 Z"></path>
+        </svg>
+        <div class="heart-text" id="heart-text">seviyorum seni</div>
+    </div>
 
     <div id="modal">
         <h2 style="font-family: 'Dancing Script'; font-size: 2.5rem; color: var(--accent-gold);">Sürpriz! 🌼</h2>
@@ -168,7 +220,10 @@
             <span class="days-count" id="days-display">0</span>
         </div>
 
-        <button class="surprise-btn" onclick="showSurprise()">Sana Bir Notum Var! ✨</button>
+        <div>
+            <button class="surprise-btn" onclick="showSurprise()">Sana Bir Notum Var! ✨</button>
+            <button class="surprise-btn" style="background: white; border: 2px solid var(--primary-yellow);" onclick="drawYellowHeart()">Bana tıkla... 💛</button>
+        </div>
 
         <div class="flower-grid">
             <img src="https://images.pexels.com/photos/1366630/pexels-photo-1366630.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Sarı Çiçek">
@@ -181,27 +236,47 @@
     </div>
 
     <script>
-        // TARİH: 29 Ocak 2026
         const startDate = new Date(2026, 0, 29); 
         
         function updateDays() {
             const now = new Date();
             const diffTime = now - startDate;
-            // Eğer bugün 29 Ocak'tan önceyse 0 göster, sonraysa günü hesapla
             const diffDays = diffTime > 0 ? Math.floor(diffTime / (1000 * 60 * 60 * 24)) : 0; 
             document.getElementById("days-display").innerText = diffDays + ". Gün";
         }
         updateDays();
 
-        // SURPRIZ FONKSIYONLARI
+        // KALP ANİMASYONU FONKSİYONU
+        function drawYellowHeart() {
+            const container = document.getElementById('heart-container');
+            const overlay = document.getElementById('overlay');
+            const heartPath = document.getElementById('main-heart');
+            const heartText = document.getElementById('heart-text');
+
+            // Resetle
+            heartPath.classList.remove('animate-heart');
+            heartText.classList.remove('fade-in-text');
+            
+            // Göster
+            container.style.display = 'block';
+            overlay.style.display = 'block';
+
+            // Animasyonu başlat
+            setTimeout(() => {
+                heartPath.classList.add('animate-heart');
+                heartText.classList.add('fade-in-text');
+            }, 10);
+        }
+
+        function closeHeart() {
+            document.getElementById('heart-container').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
         function showSurprise() {
             document.getElementById('modal').style.display = 'block';
             document.getElementById('overlay').style.display = 'block';
-            
-            // Konfeti etkisi yarat
-            for(let i=0; i<30; i++) {
-                setTimeout(createFlower, i * 50);
-            }
+            for(let i=0; i<30; i++) { setTimeout(createFlower, i * 50); }
         }
 
         function closeSurprise() {
@@ -209,7 +284,6 @@
             document.getElementById('overlay').style.display = 'none';
         }
 
-        // ÇİÇEK YAĞDIRMA
         const field = document.getElementById('flower-field');
         const flowers = ['🌼', '🌻', '✨', '💛'];
 
@@ -222,7 +296,6 @@
             field.appendChild(f);
             setTimeout(() => { f.remove(); }, 5000);
         }
-
         setInterval(createFlower, 400);
     </script>
 </body>
