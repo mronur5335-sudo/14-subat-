@@ -6,67 +6,35 @@
     <title>Sarı Papatyam</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-yellow: #FFD700;
-            --soft-yellow: #FFF9E3;
-            --dark-text: #5D5326;
-            --accent-gold: #DAA520;
-        }
-
-        body {
-            margin: 0; font-family: 'Poppins', sans-serif;
-            background-color: var(--soft-yellow); color: var(--dark-text);
-            overflow-x: hidden;
-        }
-
+        :root { --primary-yellow: #FFD700; --soft-yellow: #FFF9E3; --dark-text: #5D5326; --accent-gold: #DAA520; }
+        body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--soft-yellow); color: var(--dark-text); overflow-x: hidden; }
         .flower-field { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: -1; }
         .falling-flower { position: absolute; top: -50px; font-size: 25px; animation: fall linear forwards; }
         @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
-
         .container { max-width: 700px; margin: 50px auto; padding: 20px; text-align: center; }
-        h1 { font-family: 'Dancing Script', cursive; font-size: 4rem; color: #B8860B; }
-
-        .anniversary-card {
-            background: white; padding: 30px; border-radius: 50px 0 50px 0;
-            box-shadow: 10px 10px 0px var(--primary-yellow); margin: 30px 0;
-        }
-
+        h1 { font-family: 'Dancing Script', cursive; font-size: 4rem; color: #B8860B; margin-bottom: 10px; animation: heartBeat 2s infinite; }
+        @keyframes heartBeat { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        .anniversary-card { background: white; padding: 30px; border-radius: 50px 0 50px 0; box-shadow: 10px 10px 0px var(--primary-yellow); margin: 30px 0; }
         .days-count { font-size: 3.5rem; font-weight: 800; color: var(--accent-gold); display: block; }
-
         .flower-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 30px 0; }
-        .flower-grid img { width: 100%; height: 200px; object-fit: cover; border-radius: 15px; border: 4px solid white; }
+        .flower-grid img { width: 100%; height: 200px; object-fit: cover; border-radius: 15px; border: 4px solid white; transition: 0.3s; }
+        
+        /* NOT BÖLÜMÜ */
+        .note-section { background: white; padding: 25px; border-radius: 25px; margin: 30px 0; border: 2px solid var(--primary-yellow); }
+        textarea { width: 90%; height: 80px; border: 1px solid #ddd; border-radius: 15px; padding: 12px; margin-bottom: 10px; resize: none; outline: none; }
+        #savedNote { margin-top: 15px; padding: 15px; background: #FFF9E3; border-radius: 15px; color: #B8860B; font-weight: 600; display: none; }
 
-        /* NOT BIRAKMA ALANI */
-        .note-section {
-            background: #fff; padding: 20px; border-radius: 20px; margin-top: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid var(--primary-yellow);
-        }
-        textarea {
-            width: 90%; height: 80px; border: 1px solid #ddd; border-radius: 10px;
-            padding: 10px; font-family: 'Poppins'; margin-bottom: 10px; resize: none;
-        }
-
-        /* ALT KISIMDAKİ CÜMLE */
-        .final-quote {
-            font-family: 'Dancing Script', cursive; font-size: 2.2rem;
-            color: #B8860B; margin-top: 50px; padding: 20px;
-        }
-
-        .btn-group { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-        .surprise-btn {
-            background: var(--primary-yellow); color: var(--dark-text); border: none;
-            padding: 15px 30px; font-size: 1.1rem; font-weight: bold; border-radius: 50px;
-            cursor: pointer; transition: all 0.3s;
-        }
+        .surprise-btn { background: var(--primary-yellow); color: var(--dark-text); border: none; padding: 15px 30px; font-size: 1rem; font-weight: bold; border-radius: 50px; cursor: pointer; transition: 0.3s; margin: 10px 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .surprise-btn:hover { transform: translateY(-3px); background: var(--accent-gold); color: white; }
+        .final-quote { font-family: 'Dancing Script', cursive; font-size: 2.2rem; color: #B8860B; margin-top: 40px; padding: 20px; }
 
-        /* SARI KALP ÇİZİMİ */
+        /* KALP ÇİZİMİ */
         #heart-container { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 200; }
         .heart-svg { width: 300px; height: 300px; }
         .heart-path { stroke: var(--primary-yellow); stroke-width: 5; fill: none; stroke-dasharray: 1000; stroke-dashoffset: 1000; }
         .animate-heart { animation: drawHeart 3s linear forwards; }
         @keyframes drawHeart { from { stroke-dashoffset: -1000; } to { stroke-dashoffset: 0; } }
-        .heart-text { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); font-family: 'Dancing Script', cursive; font-size: 2rem; color: #B8860B; opacity: 0; }
+        .heart-text { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); font-family: 'Dancing Script', cursive; font-size: 2rem; color: #B8860B; opacity: 0; white-space: nowrap; }
         .fade-in-text { animation: fadeIn 1s ease-in forwards 2.5s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         #overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 100; }
@@ -74,7 +42,7 @@
 </head>
 <body>
     <div class="flower-field" id="flower-field"></div>
-    <div id="overlay" onclick="document.getElementById('heart-container').style.display='none'; this.style.display='none';"></div>
+    <div id="overlay" onclick="closeHeart()"></div>
 
     <div id="heart-container">
         <svg class="heart-svg" viewBox="0 0 200 200">
@@ -87,7 +55,7 @@
         <h1>Sarı Papatyam</h1>
         <div class="anniversary-card">
             <p style="margin: 0; font-weight: 600;">29 Ocak 2026'dan beri...</p>
-            <span class="days-count" id="days-display">0. Gün</span>
+            <span class="days-count" id="days-display">0</span>
         </div>
 
         <div class="flower-grid">
@@ -95,54 +63,69 @@
             <img src="https://images.pexels.com/photos/1390433/pexels-photo-1390433.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Papatya">
         </div>
 
+        <div class="note-section">
+            <h3 style="margin-top:0;">Birbirimize Not Bırakalım ✍️</h3>
+            <textarea id="noteInput" placeholder="Buraya bir not yaz..."></textarea><br>
+            <button class="surprise-btn" onclick="sendNote()">Notu Gönder</button>
+            <div id="savedNote">Gelen Mesaj: <br> <span id="noteText" style="font-style: italic; color: #5D5326;"></span></div>
+        </div>
+
         <div class="btn-group">
             <button class="surprise-btn" onclick="drawYellowHeart()">Bana tıkla... 💛</button>
             <button class="surprise-btn" style="background: #333; color: white;" onclick="window.location.href='kediler.html'">Bizim Hikayemiz... 🐾</button>
         </div>
 
-        <div class="note-section">
-            <h3 style="margin-top:0;">Birbirimize Not Bırakalım ✍️</h3>
-            <textarea id="noteInput" placeholder="Buraya bir not bırak..."></textarea><br>
-            <button class="surprise-btn" style="padding: 10px 20px; font-size: 0.9rem;" onclick="saveNote()">Notu Gönder</button>
-            <div id="savedNote" style="margin-top:15px; font-style: italic; color: #888;"></div>
-        </div>
-
-        <div class="final-quote">
-            "Yaşamın Bir Sebebi varsa O sebep sensin"
-        </div>
+        <div class="final-quote">"Yaşamın Bir Sebebi varsa O sebep sensin"</div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
     <script>
-        const startDate = new Date(2026, 0, 29); 
+        // FIREBASE BAĞLANTISI
+        const firebaseConfig = { databaseURL: "https://notgonder-default-rtdb.firebaseio.com/" };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        function sendNote() {
+            const note = document.getElementById('noteInput').value;
+            if(note.trim() !== "") {
+                database.ref('lastNote').set({ text: note, time: Date.now() })
+                .then(() => {
+                    document.getElementById('noteInput').value = "";
+                    alert("Notun iletildi! ❤️");
+                });
+            }
+        }
+
+        database.ref('lastNote').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if(data && data.text) {
+                document.getElementById('savedNote').style.display = 'block';
+                document.getElementById('noteText').innerText = data.text;
+            }
+        });
+
+        // TARİH VE ANİMASYON
+        const startDate = new Date(2026, 0, 29);
         function updateDays() {
             const now = new Date();
-            const diffTime = now - startDate;
-            const diffDays = diffTime > 0 ? Math.floor(diffTime / (1000 * 60 * 60 * 24)) : 0; 
-            document.getElementById("days-display").innerText = diffDays + ". Gün";
+            const diffDays = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
+            document.getElementById("days-display").innerText = (diffDays > 0 ? diffDays : 0) + ". Gün";
         }
         updateDays();
 
         function drawYellowHeart() {
-            const container = document.getElementById('heart-container');
-            const heartPath = document.getElementById('main-heart');
-            const heartText = document.getElementById('heart-text');
-            container.style.display = 'block';
+            document.getElementById('heart-container').style.display = 'block';
             document.getElementById('overlay').style.display = 'block';
-            heartPath.classList.remove('animate-heart');
-            heartText.classList.remove('fade-in-text');
-            setTimeout(() => { heartPath.classList.add('animate-heart'); heartText.classList.add('fade-in-text'); }, 50);
+            document.getElementById('main-heart').classList.add('animate-heart');
+            document.getElementById('heart-text').classList.add('fade-in-text');
         }
 
-        function saveNote() {
-            const note = document.getElementById('noteInput').value;
-            if(note) {
-                localStorage.setItem('loveNote', note);
-                document.getElementById('savedNote').innerText = "Son Gönderilen: " + note;
-                document.getElementById('noteInput').value = "";
-                alert("Notun başarıyla kaydedildi! (Sayfa yenilense de burada kalacak)");
-            }
+        function closeHeart() {
+            document.getElementById('heart-container').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
         }
-        window.onload = () => { if(localStorage.getItem('loveNote')) document.getElementById('savedNote').innerText = "Sana Gelen Not: " + localStorage.getItem('loveNote'); }
 
         setInterval(() => {
             const f = document.createElement('div');
